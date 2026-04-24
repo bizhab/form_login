@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registrasi Seminar | HMJTI × Permikomnas</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    * { font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    body {
+      background-color: #f8fafc;
+      background-image:
+        radial-gradient(at 20% 10%, rgba(59,130,246,0.08) 0px, transparent 50%),
+        radial-gradient(at 80% 90%, rgba(16,185,129,0.07) 0px, transparent 50%);
+      min-height: 100vh;
+    }
+
+    .card-shadow {
+      box-shadow:
+        0 0 0 1px rgba(15,23,42,0.05),
+        0 4px 6px -1px rgba(15,23,42,0.04),
+        0 20px 40px -8px rgba(15,23,42,0.10);
+    }
+
+    .input-field {
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .input-field:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+    }
+
+    .btn-submit {
+      transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+    }
+    .btn-submit:hover:not(:disabled) {
+      background-color: #1d4ed8;
+      box-shadow: 0 4px 14px rgba(59,130,246,0.35);
+      transform: translateY(-1px);
+    }
+    .btn-submit:active:not(:disabled) {
+      transform: translateY(0px);
+    }
+    .btn-submit:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .badge {
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      border: 1px solid #bfdbfe;
+    }
+
+    .success-card {
+      animation: fadeScaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+    @keyframes fadeScaleIn {
+      from { opacity: 0; transform: scale(0.92) translateY(8px); }
+      to   { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    .divider-line {
+      background: linear-gradient(to right, transparent, #e2e8f0, transparent);
+    }
+
+    .spinner {
+      width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-top-color: #fff;
+      border-radius: 50%;
+      display: inline-block;
+      animation: spin 0.7s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    select option { color: #0f172a; }
+  </style>
+</head>
+<body class="flex items-start justify-center px-4 py-12">
+
+  <div class="w-full max-w-lg">
+
+    <!-- Header Logos -->
+    <div class="flex items-center justify-center gap-4 mb-6">
+      <div class="flex items-center gap-2 badge rounded-full px-3 py-1.5">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="7" fill="#2563eb" opacity="0.15"/>
+          <text x="8" y="11.5" text-anchor="middle" font-size="7" font-weight="800" fill="#1d4ed8" font-family="Plus Jakarta Sans">HJ</text>
+        </svg>
+        <span class="text-xs font-700 text-blue-700 font-semibold tracking-wide">HMJTI</span>
+      </div>
+      <span class="text-slate-300 font-light text-lg">×</span>
+      <div class="flex items-center gap-2 badge rounded-full px-3 py-1.5">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <circle cx="8" cy="8" r="7" fill="#059669" opacity="0.15"/>
+          <text x="8" y="11.5" text-anchor="middle" font-size="5.5" font-weight="800" fill="#047857" font-family="Plus Jakarta Sans">PKN</text>
+        </svg>
+        <span class="text-xs font-semibold text-emerald-700 tracking-wide">Permikomnas</span>
+      </div>
+    </div>
+
+    <!-- Main Card -->
+    <div class="bg-white rounded-2xl card-shadow overflow-hidden">
+
+      <!-- Card Header -->
+      <div class="relative px-8 pt-8 pb-6">
+        <div class="absolute inset-0 h-1 bg-gradient-to-r from-blue-500 via-blue-400 to-emerald-400 top-0"></div>
+        <p class="text-xs font-semibold tracking-widest text-blue-600 uppercase mb-2">Seminar Kolaborasi 2025</p>
+        <h1 class="text-2xl font-800 text-slate-900 font-extrabold leading-tight">
+          Form Pendaftaran<br/>
+          <span class="text-blue-600">Peserta Seminar</span>
+        </h1>
+        <p class="mt-2 text-sm text-slate-500 leading-relaxed">
+          Isi data di bawah ini dengan benar. Setelah mendaftar, kamu akan diarahkan ke grup WhatsApp resmi.
+        </p>
+      </div>
+
+      <div class="h-px divider-line mx-8"></div>
+
+      <!-- Form -->
+      <div id="form-wrapper" class="px-8 py-6">
+        <form id="registrationForm" novalidate>
+
+          <!-- Nama Lengkap -->
+          <div class="mb-5">
+            <label for="nama" class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Nama Lengkap
+              <span class="text-red-500 ml-0.5">*</span>
+            </label>
+            <input
+              type="text"
+              id="nama"
+              name="nama"
+              required
+              placeholder="Contoh: Budi Santoso"
+              class="input-field w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 bg-slate-50 focus:bg-white"
+            />
+          </div>
+
+          <!-- Instansi -->
+          <div class="mb-5">
+            <label for="instansi" class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Instansi / Universitas
+              <span class="text-red-500 ml-0.5">*</span>
+            </label>
+            <input
+              type="text"
+              id="instansi"
+              name="instansi"
+              required
+              placeholder="Contoh: Universitas Hasanuddin"
+              class="input-field w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 bg-slate-50 focus:bg-white"
+            />
+          </div>
+
+          <!-- Jenis Kelamin -->
+          <div class="mb-5">
+            <label for="jenisKelamin" class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Jenis Kelamin
+              <span class="text-red-500 ml-0.5">*</span>
+            </label>
+            <div class="relative">
+              <select
+                id="jenisKelamin"
+                name="jenisKelamin"
+                required
+                class="input-field w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-900 bg-slate-50 focus:bg-white appearance-none pr-10"
+              >
+                <option value="" disabled selected class="text-slate-400">Pilih jenis kelamin</option>
+                <option value="Laki-laki">Laki-laki</option>
+                <option value="Perempuan">Perempuan</option>
+              </select>
+              <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center">
+                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <!-- Saran -->
+          <div class="mb-7">
+            <label for="saran" class="block text-sm font-semibold text-slate-700 mb-1.5">
+              Saran / Harapan
+              <span class="text-xs font-normal text-slate-400 ml-1">(opsional)</span>
+            </label>
+            <textarea
+              id="saran"
+              name="saran"
+              rows="3"
+              placeholder="Tuliskan saran atau harapanmu untuk seminar ini..."
+              class="input-field w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 bg-slate-50 focus:bg-white resize-none"
+            ></textarea>
+          </div>
+
+          <!-- Error message -->
+          <div id="error-msg" class="hidden mb-4 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3"></div>
+
+          <!-- Submit Button -->
+          <button
+            type="submit"
+            id="submitBtn"
+            class="btn-submit w-full bg-blue-600 text-white font-semibold rounded-lg py-3 text-sm"
+          >
+            Daftar Sekarang →
+          </button>
+
+          <p class="text-center text-xs text-slate-400 mt-4">
+            Data kamu aman dan tidak akan disebarluaskan.
+          </p>
+        </form>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <p class="text-center text-xs text-slate-400 mt-6">
+      © 2025 HMJTI × Permikomnas · Seminar Kolaborasi
+    </p>
+  </div>
+
+  <!-- Success Overlay (hidden by default) -->
+  <div id="success-wrapper" class="hidden w-full max-w-lg">
+    <div class="bg-white rounded-2xl card-shadow overflow-hidden success-card">
+      <div class="absolute inset-0 h-1 bg-gradient-to-r from-emerald-400 to-blue-400 top-0 rounded-t-2xl"></div>
+      <div class="px-8 py-12 text-center">
+        <!-- Checkmark Icon -->
+        <div class="w-16 h-16 bg-emerald-50 border-2 border-emerald-200 rounded-full flex items-center justify-center mx-auto mb-5">
+          <svg class="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+          </svg>
+        </div>
+        <h2 class="text-xl font-extrabold text-slate-900 mb-2">Pendaftaran Berhasil! 🎉</h2>
+        <p class="text-sm text-slate-500 mb-6 leading-relaxed">
+          Terima kasih telah mendaftar. Kamu akan segera diarahkan ke grup WhatsApp.<br/>
+          Jika tidak otomatis, klik tombol di bawah.
+        </p>
+        <a
+          id="wa-btn"
+          href="#"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg px-6 py-3 text-sm transition-colors"
+        >
+          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+          </svg>
+          Gabung Grup WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // =============================================
+    //  KONFIGURASI — Ganti 2 variabel di bawah ini
+    // =============================================
+    const scriptURL    = "URL_GAS_DISINI";       // URL dari Google Apps Script Web App
+    const whatsappLink = "LINK_GRUP_WA_DISINI";  // Link undangan grup WhatsApp
+    // =============================================
+
+    const form          = document.getElementById('registrationForm');
+    const submitBtn     = document.getElementById('submitBtn');
+    const errorMsg      = document.getElementById('error-msg');
+    const formWrapper   = document.getElementById('form-wrapper');
+    const successWrapper = document.getElementById('success-wrapper');
+    const waBtn         = document.getElementById('wa-btn');
+
+    // Posisikan success-wrapper di luar DOM body agar bisa ditampilkan
+    document.body.appendChild(successWrapper);
+
+    form.addEventListener('submit', async function (e) {
+      e.preventDefault();
+
+      // Validasi manual
+      const nama        = form.nama.value.trim();
+      const instansi    = form.instansi.value.trim();
+      const jenisKelamin = form.jenisKelamin.value;
+      const saran       = form.saran.value.trim();
+
+      if (!nama || !instansi || !jenisKelamin) {
+        showError('Semua field wajib diisi. Mohon lengkapi data kamu.');
+        return;
+      }
+
+      // Loading state
+      hideError();
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span class="spinner"></span>Mengirim...';
+
+      const payload = new FormData();
+      payload.append('nama', nama);
+      payload.append('instansi', instansi);
+      payload.append('jenisKelamin', jenisKelamin);
+      payload.append('saran', saran);
+
+      try {
+        const response = await fetch(scriptURL, {
+          method : 'POST',
+          body   : payload,
+        });
+
+        if (!response.ok) throw new Error(`Server error: ${response.status}`);
+
+        // Tampilkan halaman sukses
+        showSuccess();
+
+        // Redirect otomatis ke WhatsApp setelah 2.5 detik
+        setTimeout(() => {
+          window.location.href = whatsappLink;
+        }, 2500);
+
+      } catch (err) {
+        console.error('Submit error:', err);
+        showError('Gagal mengirim data. Periksa koneksi internet kamu, lalu coba lagi.');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Daftar Sekarang →';
+      }
+    });
+
+    function showError(msg) {
+      errorMsg.textContent = msg;
+      errorMsg.classList.remove('hidden');
+    }
+
+    function hideError() {
+      errorMsg.classList.add('hidden');
+    }
+
+    function showSuccess() {
+      // Sembunyikan card form, tampilkan card sukses
+      document.querySelector('.w-full.max-w-lg:not(#success-wrapper)').classList.add('hidden');
+      waBtn.href = whatsappLink;
+      successWrapper.classList.remove('hidden');
+      successWrapper.classList.add('flex', 'items-center', 'justify-center');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  </script>
+</body>
+</html>
