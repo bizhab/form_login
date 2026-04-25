@@ -261,8 +261,9 @@
     // =============================================
     //  KONFIGURASI — Ganti 2 variabel di bawah ini
     // =============================================
-    const scriptURL    = "URL_GAS_DISINI";       // URL dari Google Apps Script Web App
-    const whatsappLink = "LINK_GRUP_WA_DISINI";  // Link undangan grup WhatsApp
+    const encodedURL   = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J5UWFRM003WGwzMmNWMkxWNldIYnd4ZlNBZllwckRZNTZYSHM1M2YteHNoU1FEVG1tY3lJRGMtU3lxUVVwTHNJOEEvZXhlYw==";
+    const scriptURL    = atob(encodedURL); // atob() otomatis mengubah sandi kembali menjadi URL asli saat script berjalan
+    const whatsappLink = "https://chat.whatsapp.com/IBGUSpAZZVp3kO3eGuHOTo";  // Link undangan grup WhatsApp
     // =============================================
 
     const form          = document.getElementById('registrationForm');
