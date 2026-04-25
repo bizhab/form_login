@@ -7,260 +7,402 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            cyber: {
+              blue: '#3b82f6',
+              red: '#ef4444',
+              dark: '#0f172a',
+              card: 'rgba(15, 23, 42, 0.65)'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
   <style>
-    * { font-family: 'Plus Jakarta Sans', sans-serif; }
+    :root {
+      --bg-color: #f8fafc;
+      --text-color: #0f172a;
+      --card-bg: rgba(255, 255, 255, 0.6);
+      --card-border: rgba(255, 255, 255, 0.5);
+      --input-bg: rgba(255, 255, 255, 0.8);
+      --input-border: rgba(0, 0, 0, 0.1);
+      --input-text: #0f172a;
+      --shadow-color: rgba(0, 0, 0, 0.05);
+    }
+    
+    .dark {
+      --bg-color: #050b14;
+      --text-color: #e2e8f0;
+      --card-bg: var(--tw-colors-cyber-card);
+      --card-border: rgba(255, 255, 255, 0.08);
+      --input-bg: rgba(255, 255, 255, 0.03);
+      --input-border: rgba(255, 255, 255, 0.1);
+      --input-text: white;
+      --shadow-color: rgba(0, 0, 0, 0.5);
+    }
 
     body {
-      background-color: #f8fafc;
-      background-image:
-        radial-gradient(at 20% 10%, rgba(59,130,246,0.08) 0px, transparent 50%),
-        radial-gradient(at 80% 90%, rgba(16,185,129,0.07) 0px, transparent 50%);
-      min-height: 100vh;
+      margin: 0;
+      overflow-x: hidden;
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      transition: background-color 0.4s ease, color 0.4s ease;
     }
 
-    .card-shadow {
-      box-shadow:
-        0 0 0 1px rgba(15,23,42,0.05),
-        0 4px 6px -1px rgba(15,23,42,0.04),
-        0 20px 40px -8px rgba(15,23,42,0.10);
+    /* Latar Belakang Rangkaian Elektronik */
+    #circuit-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: -1;
+      pointer-events: none;
     }
 
-    .input-field {
-      transition: border-color 0.2s, box-shadow 0.2s;
+    /* Efek Kaca Premium (Glassmorphism) */
+    .glass-card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--card-border);
+      box-shadow: 0 25px 50px -12px var(--shadow-color), inset 0 1px 0 rgba(255,255,255,0.1);
+      transition: background-color 0.4s ease, border-color 0.4s ease;
     }
-    .input-field:focus {
+
+    /* Glow Effect pada Input */
+    .cyber-input {
+      background: var(--input-bg);
+      border: 1px solid var(--input-border);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      color: var(--input-text);
+    }
+    .cyber-input:focus {
       outline: none;
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+      background: var(--bg-color);
+      border-color: rgba(59, 130, 246, 0.5);
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15), inset 0 0 20px rgba(59, 130, 246, 0.05);
     }
 
-    .btn-submit {
-      transition: background-color 0.2s, transform 0.1s, box-shadow 0.2s;
+    /* Tombol Submit dengan Animasi Gradient */
+    .cyber-button {
+      background: linear-gradient(135deg, #2563eb, #dc2626);
+      background-size: 200% 200%;
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
     }
-    .btn-submit:hover:not(:disabled) {
-      background-color: #1d4ed8;
-      box-shadow: 0 4px 14px rgba(59,130,246,0.35);
-      transform: translateY(-1px);
+    .cyber-button::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
-    .btn-submit:active:not(:disabled) {
-      transform: translateY(0px);
+    .cyber-button:hover:not(:disabled) {
+      background-position: 100% 100%;
+      box-shadow: 0 0 20px rgba(220, 38, 38, 0.4), 0 0 40px rgba(37, 99, 235, 0.4);
+      transform: translateY(-2px);
     }
-    .btn-submit:disabled {
-      opacity: 0.7;
+    .cyber-button:hover:not(:disabled)::before {
+      opacity: 1;
+    }
+    .cyber-button:active:not(:disabled) {
+      transform: translateY(0);
+    }
+    .cyber-button:disabled {
+      opacity: 0.6;
       cursor: not-allowed;
+      filter: grayscale(0.5);
     }
 
-    .badge {
-      background: linear-gradient(135deg, #eff6ff, #dbeafe);
-      border: 1px solid #bfdbfe;
-    }
-
-    .success-card {
-      animation: fadeScaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
-    }
-    @keyframes fadeScaleIn {
-      from { opacity: 0; transform: scale(0.92) translateY(8px); }
-      to   { opacity: 1; transform: scale(1) translateY(0); }
-    }
-
-    .divider-line {
-      background: linear-gradient(to right, transparent, #e2e8f0, transparent);
-    }
-
+    /* Animasi Loading Mulus */
     .spinner {
-      width: 16px; height: 16px;
-      border: 2px solid rgba(255,255,255,0.4);
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.2);
       border-top-color: #fff;
       border-radius: 50%;
       display: inline-block;
-      animation: spin 0.7s linear infinite;
-      margin-right: 8px;
+      animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      margin-right: 10px;
       vertical-align: middle;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    select option { color: #0f172a; }
+    /* Kustomisasi Scrollbar agar tidak merusak tema */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-color); }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+    .dark ::-webkit-scrollbar-thumb { background: #1e293b; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    .dark ::-webkit-scrollbar-thumb:hover { background: #334155; }
+
+    /* Fix Dropdown options for dark mode */
+    select option { background-color: var(--bg-color); color: var(--text-color); }
   </style>
 </head>
-<body class="flex items-start justify-center px-4 py-12">
+<body class="flex items-center justify-center min-h-screen p-4 sm:p-8 transition-colors duration-500">
 
-  <div class="w-full max-w-lg">
+  <!-- Tombol Toggle Tema -->
+  <button id="themeToggle" class="fixed top-4 right-4 z-50 p-3 rounded-full glass-card hover:scale-110 transition-transform shadow-lg group">
+    <!-- Icon Moon (Gelap) - Tampil di tema Terang -->
+    <svg id="icon-moon" class="w-6 h-6 text-slate-800 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
+    </svg>
+    <!-- Icon Sun (Terang) - Tampil di tema Gelap -->
+    <svg id="icon-sun" class="w-6 h-6 text-yellow-400 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+    </svg>
+  </button>
 
-    <!-- Header Logos -->
-    <div class="flex items-center justify-center gap-4 mb-6">
-      <div class="flex items-center gap-2 badge rounded-full px-3 py-1.5">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <circle cx="8" cy="8" r="7" fill="#2563eb" opacity="0.15"/>
-          <text x="8" y="11.5" text-anchor="middle" font-size="7" font-weight="800" fill="#1d4ed8" font-family="Plus Jakarta Sans">HJ</text>
-        </svg>
-        <span class="text-xs font-700 text-blue-700 font-semibold tracking-wide">HMJTI</span>
-      </div>
-      <span class="text-slate-300 font-light text-lg">×</span>
-      <div class="flex items-center gap-2 badge rounded-full px-3 py-1.5">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <circle cx="8" cy="8" r="7" fill="#059669" opacity="0.15"/>
-          <text x="8" y="11.5" text-anchor="middle" font-size="5.5" font-weight="800" fill="#047857" font-family="Plus Jakarta Sans">PKN</text>
-        </svg>
-        <span class="text-xs font-semibold text-emerald-700 tracking-wide">Permikomnas</span>
-      </div>
-    </div>
+  <!-- Latar Belakang Rangkaian -->
+  <canvas id="circuit-canvas"></canvas>
 
-    <!-- Main Card -->
-    <div class="bg-white rounded-2xl card-shadow overflow-hidden">
+  <main class="w-full max-w-lg relative z-10 mt-4 mb-12">
+    
+    <!-- MAIN FORM CARD -->
+    <div id="form-wrapper" class="glass-card rounded-3xl overflow-hidden relative transition-all duration-500">
+      
+      <!-- Aksen Cahaya di atas Card -->
+      <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-red-500 opacity-80"></div>
 
-      <!-- Card Header -->
-      <div class="relative px-8 pt-8 pb-6">
-        <div class="absolute inset-0 h-1 bg-gradient-to-r from-blue-500 via-blue-400 to-emerald-400 top-0"></div>
-        <p class="text-xs font-semibold tracking-widest text-blue-600 uppercase mb-2">Seminar Kolaborasi 2025</p>
-        <h1 class="text-2xl font-800 text-slate-900 font-extrabold leading-tight">
-          Form Pendaftaran<br/>
-          <span class="text-blue-600">Peserta Seminar</span>
-        </h1>
-        <p class="mt-2 text-sm text-slate-500 leading-relaxed">
-          Isi data di bawah ini dengan benar. Setelah mendaftar, kamu akan diarahkan ke grup WhatsApp resmi.
-        </p>
-      </div>
+      <div class="p-8 sm:p-10">
+        <div class="text-center mb-8">
+          <p class="text-xs font-bold tracking-widest text-slate-500 dark:text-slate-400 uppercase mb-2">Seminar Tech</p>
+          <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-red-600 dark:from-blue-400 dark:to-red-400 mb-3">
+            Sistem Registrasi
+          </h1>
+          <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+            Inisialisasi data peserta. Harap isi dengan kredensial yang valid untuk mendapatkan akses ke jaringan grup resmi.
+          </p>
+        </div>
 
-      <div class="h-px divider-line mx-8"></div>
-
-      <!-- Form -->
-      <div id="form-wrapper" class="px-8 py-6">
         <form id="registrationForm" novalidate>
-
+          
           <!-- Nama Lengkap -->
           <div class="mb-5">
-            <label for="nama" class="block text-sm font-semibold text-slate-700 mb-1.5">
-              Nama Lengkap
-              <span class="text-red-500 ml-0.5">*</span>
+            <label for="nama" class="block text-sm font-semibold text-slate-800 dark:text-slate-300 mb-2">
+              Nama Lengkap <span class="text-red-500">*</span>
             </label>
-            <input
-              type="text"
-              id="nama"
-              name="nama"
-              required
-              placeholder="Contoh: Budi Santoso"
-              class="input-field w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 bg-slate-50 focus:bg-white"
-            />
+            <input type="text" id="nama" name="nama" required placeholder="Masukkan nama..."
+              class="cyber-input w-full rounded-xl px-4 py-3 text-sm placeholder-slate-400 dark:placeholder-slate-500" />
           </div>
 
           <!-- Instansi -->
           <div class="mb-5">
-            <label for="instansi" class="block text-sm font-semibold text-slate-700 mb-1.5">
-              Instansi / Universitas
-              <span class="text-red-500 ml-0.5">*</span>
+            <label for="instansi" class="block text-sm font-semibold text-slate-800 dark:text-slate-300 mb-2">
+              Instansi / Universitas <span class="text-red-500">*</span>
             </label>
-            <input
-              type="text"
-              id="instansi"
-              name="instansi"
-              required
-              placeholder="Contoh: Universitas Hasanuddin"
-              class="input-field w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 bg-slate-50 focus:bg-white"
-            />
+            <input type="text" id="instansi" name="instansi" required placeholder="Contoh: Universitas Hasanuddin"
+              class="cyber-input w-full rounded-xl px-4 py-3 text-sm placeholder-slate-400 dark:placeholder-slate-500" />
           </div>
 
           <!-- Jenis Kelamin -->
           <div class="mb-5">
-            <label for="jenisKelamin" class="block text-sm font-semibold text-slate-700 mb-1.5">
-              Jenis Kelamin
-              <span class="text-red-500 ml-0.5">*</span>
+            <label for="jenisKelamin" class="block text-sm font-semibold text-slate-800 dark:text-slate-300 mb-2">
+              Jenis Kelamin <span class="text-red-500">*</span>
             </label>
             <div class="relative">
-              <select
-                id="jenisKelamin"
-                name="jenisKelamin"
-                required
-                class="input-field w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-900 bg-slate-50 focus:bg-white appearance-none pr-10"
-              >
-                <option value="" disabled selected class="text-slate-400">Pilih jenis kelamin</option>
+              <select id="jenisKelamin" name="jenisKelamin" required
+                class="cyber-input w-full rounded-xl px-4 py-3 text-sm appearance-none">
+                <option value="" disabled selected class="text-slate-400 dark:text-slate-500">Pilih identitas</option>
                 <option value="Laki-laki">Laki-laki</option>
                 <option value="Perempuan">Perempuan</option>
               </select>
-              <div class="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                <svg class="w-4 h-4 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                </svg>
+              <div class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-slate-500 dark:text-slate-400">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
               </div>
             </div>
           </div>
 
           <!-- Saran -->
-          <div class="mb-7">
-            <label for="saran" class="block text-sm font-semibold text-slate-700 mb-1.5">
-              Saran / Harapan
-              <span class="text-xs font-normal text-slate-400 ml-1">(opsional)</span>
+          <div class="mb-8">
+            <label for="saran" class="block text-sm font-semibold text-slate-800 dark:text-slate-300 mb-2">
+              Feedback / Harapan <span class="text-xs font-normal text-slate-500 ml-1">(Opsional)</span>
             </label>
-            <textarea
-              id="saran"
-              name="saran"
-              rows="3"
-              placeholder="Tuliskan saran atau harapanmu untuk seminar ini..."
-              class="input-field w-full border border-slate-200 rounded-lg px-4 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 bg-slate-50 focus:bg-white resize-none"
-            ></textarea>
+            <textarea id="saran" name="saran" rows="3" placeholder="Tuliskan pesan untuk sistem..."
+              class="cyber-input w-full rounded-xl px-4 py-3 text-sm placeholder-slate-400 dark:placeholder-slate-500 resize-none"></textarea>
           </div>
 
-          <!-- Error message -->
-          <div id="error-msg" class="hidden mb-4 bg-red-50 border border-red-200 text-red-700 text-sm rounded-lg px-4 py-3"></div>
+          <!-- Error Alert -->
+          <div id="error-msg" class="hidden mb-6 bg-red-100 dark:bg-red-500/10 border border-red-300 dark:border-red-500/50 text-red-600 dark:text-red-400 text-sm rounded-lg px-4 py-3 flex items-start gap-3">
+            <svg class="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+            <span id="error-text">Terjadi kesalahan pada sistem.</span>
+          </div>
 
           <!-- Submit Button -->
-          <button
-            type="submit"
-            id="submitBtn"
-            class="btn-submit w-full bg-blue-600 text-white font-semibold rounded-lg py-3 text-sm"
-          >
-            Daftar Sekarang →
+          <button type="submit" id="submitBtn" class="cyber-button w-full text-white font-bold rounded-xl py-4 text-sm flex justify-center items-center shadow-lg">
+            INISIALISASI PENDAFTARAN
           </button>
-
-          <p class="text-center text-xs text-slate-400 mt-4">
-            Data kamu aman dan tidak akan disebarluaskan.
-          </p>
         </form>
       </div>
     </div>
 
-    <!-- Footer -->
-    <p class="text-center text-xs text-slate-400 mt-6">
-      © 2025 HMJTI × Permikomnas · Seminar Kolaborasi
-    </p>
-  </div>
-
-  <!-- Success Overlay (hidden by default) -->
-  <div id="success-wrapper" class="hidden w-full max-w-lg">
-    <div class="bg-white rounded-2xl card-shadow overflow-hidden success-card">
-      <div class="absolute inset-0 h-1 bg-gradient-to-r from-emerald-400 to-blue-400 top-0 rounded-t-2xl"></div>
-      <div class="px-8 py-12 text-center">
-        <!-- Checkmark Icon -->
-        <div class="w-16 h-16 bg-emerald-50 border-2 border-emerald-200 rounded-full flex items-center justify-center mx-auto mb-5">
-          <svg class="w-8 h-8 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
-          </svg>
+    <!-- SUCCESS CARD (Hidden initially) -->
+    <div id="success-wrapper" class="hidden glass-card rounded-3xl overflow-hidden relative">
+      <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-green-400 opacity-80"></div>
+      <div class="p-10 text-center">
+        <!-- Animated Success Ring -->
+        <div class="relative w-24 h-24 mx-auto mb-6">
+          <div class="absolute inset-0 border-4 border-blue-500/20 rounded-full"></div>
+          <div class="absolute inset-0 border-4 border-blue-500 dark:border-blue-400 rounded-full border-t-transparent animate-spin"></div>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <svg class="w-10 h-10 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+            </svg>
+          </div>
         </div>
-        <h2 class="text-xl font-extrabold text-slate-900 mb-2">Pendaftaran Berhasil! 🎉</h2>
-        <p class="text-sm text-slate-500 mb-6 leading-relaxed">
-          Terima kasih telah mendaftar. Kamu akan segera diarahkan ke grup WhatsApp.<br/>
-          Jika tidak otomatis, klik tombol di bawah.
+        
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-3">Otorisasi Berhasil</h2>
+        <p class="text-sm text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
+          Data Anda telah terekam di sistem kami. Akses menuju jaringan komunikasi (WhatsApp) telah dibuka.
         </p>
-        <a
-          id="wa-btn"
-          href="#"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-lg px-6 py-3 text-sm transition-colors"
-        >
-          <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+        
+        <a id="wa-btn" href="#" target="_blank" rel="noopener noreferrer" 
+           class="inline-flex items-center justify-center gap-2 w-full bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white font-semibold rounded-xl py-4 text-sm transition-all shadow-[0_0_15px_rgba(0,0,0,0.05)] dark:shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_20px_rgba(37,99,235,0.2)] hover:border-blue-500">
+           <svg class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 24 24">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
           </svg>
-          Gabung Grup WhatsApp
+          Mulai Sesi WhatsApp
         </a>
       </div>
     </div>
-  </div>
 
+    <!-- Footer -->
+    <div class="mt-8 text-center text-xs text-slate-500 dark:text-slate-600 tracking-wide font-semibold">
+      SYSTEM v1.0 • HMJTI × PERMIKOMNAS
+    </div>
+  </main>
+
+  <!-- ========================================== -->
+  <!-- KODE JAVASCRIPT: Animasi Canvas & Form API -->
+  <!-- ========================================== -->
   <script>
-    // =============================================
-    //  KONFIGURASI — Ganti 2 variabel di bawah ini
-    // =============================================
+    /* --- 1. ANIMASI RANGKAIAN ELEKTRONIK (CANVAS) --- */
+    const canvas = document.getElementById('circuit-canvas');
+    const ctx = canvas.getContext('2d');
+    
+    let width, height;
+    let particles = [];
+    
+    // Warna tema
+    const colors = ['rgba(59, 130, 246, ', 'rgba(239, 68, 68, ']; // Blue & Red
+
+    function resize() {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    }
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.vx = (Math.random() - 0.5) * 0.8; // Kecepatan gerak
+        this.vy = (Math.random() - 0.5) * 0.8;
+        this.radius = Math.random() * 2 + 1;
+        this.baseColor = colors[Math.floor(Math.random() * colors.length)];
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        // Pantulkan jika kena ujung layar
+        if (this.x < 0 || this.x > width) this.vx *= -1;
+        if (this.y < 0 || this.y > height) this.vy *= -1;
+      }
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.baseColor + '0.8)';
+        ctx.fill();
+      }
+    }
+
+    function initParticles() {
+      particles = [];
+      const particleCount = Math.floor((width * height) / 15000); // Kepadatan partikel
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function animateCanvas() {
+      ctx.clearRect(0, 0, width, height);
+      
+      // Update & gambar titik
+      particles.forEach(p => {
+        p.update();
+        p.draw();
+      });
+
+      // Gambar garis penghubung antar titik yang berdekatan
+      const isDark = document.documentElement.classList.contains('dark');
+      for (let i = 0; i < particles.length; i++) {
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+          
+          if (distance < 120) { // Jarak maksimal garis terhubung
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            
+            // Gradasi transparansi garis berdasarkan jarak
+            const opacity = 1 - (distance / 120);
+            ctx.strokeStyle = isDark ? `rgba(100, 150, 255, ${opacity * 0.2})` : `rgba(59, 130, 246, ${opacity * 0.15})`; // Adaptasi warna garis
+            ctx.lineWidth = 1;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(animateCanvas);
+    }
+
+    window.addEventListener('resize', () => { resize(); initParticles(); });
+    resize();
+    initParticles();
+    animateCanvas();
+
+    /* --- THEME TOGGLE LOGIC --- */
+    const themeToggleBtn = document.getElementById('themeToggle');
+    
+    // Set default ke Terang (Light Mode)
+    if (!localStorage.getItem('theme')) {
+      localStorage.setItem('theme', 'light');
+    }
+
+    // Terapkan tema saat dimuat
+    if (localStorage.getItem('theme') === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+
+    // Event Listener Toggle
+    themeToggleBtn.addEventListener('click', () => {
+      document.documentElement.classList.toggle('dark');
+      if (document.documentElement.classList.contains('dark')) {
+        localStorage.setItem('theme', 'dark');
+      } else {
+        localStorage.setItem('theme', 'light');
+      }
+    });
+
+    /* --- 2. LOGIKA FORM PENDAFTARAN & API --- */
+    // Konfigurasi URL (Gunakan kode Base64 kamu di sini)
     const encodedURL   = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J5UWFRM003WGwzMmNWMkxWNldIYnd4ZlNBZllwckRZNTZYSHM1M2YteHNoU1FEVG1tY3lJRGMtU3lxUVVwTHNJOEEvZXhlYw==";
     const scriptURL    = atob(encodedURL); // atob() otomatis mengubah sandi kembali menjadi URL asli saat script berjalan
     const whatsappLink = "https://chat.whatsapp.com/IBGUSpAZZVp3kO3eGuHOTo";  // Link undangan grup WhatsApp
@@ -268,32 +410,31 @@
 
     const form          = document.getElementById('registrationForm');
     const submitBtn     = document.getElementById('submitBtn');
-    const errorMsg      = document.getElementById('error-msg');
+    const errorBox      = document.getElementById('error-msg');
+    const errorText     = document.getElementById('error-text');
     const formWrapper   = document.getElementById('form-wrapper');
-    const successWrapper = document.getElementById('success-wrapper');
+    const successWrapper= document.getElementById('success-wrapper');
     const waBtn         = document.getElementById('wa-btn');
-
-    // Posisikan success-wrapper di luar DOM body agar bisa ditampilkan
-    document.body.appendChild(successWrapper);
 
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
 
-      // Validasi manual
-      const nama        = form.nama.value.trim();
-      const instansi    = form.instansi.value.trim();
+      // Ambil data
+      const nama         = form.nama.value.trim();
+      const instansi     = form.instansi.value.trim();
       const jenisKelamin = form.jenisKelamin.value;
-      const saran       = form.saran.value.trim();
+      const saran        = form.saran.value.trim();
 
+      // Validasi
       if (!nama || !instansi || !jenisKelamin) {
-        showError('Semua field wajib diisi. Mohon lengkapi data kamu.');
+        showError('Data tidak lengkap. Harap isi semua parameter wajib.');
         return;
       }
 
-      // Loading state
-      hideError();
+      // Mulai Animasi Loading
+      errorBox.classList.add('hidden');
       submitBtn.disabled = true;
-      submitBtn.innerHTML = '<span class="spinner"></span>Mengirim...';
+      submitBtn.innerHTML = '<span class="spinner"></span>MENSTRANSMISIKAN DATA...';
 
       const payload = new FormData();
       payload.append('nama', nama);
@@ -302,45 +443,49 @@
       payload.append('saran', saran);
 
       try {
-        const response = await fetch(scriptURL, {
-          method : 'POST',
-          body   : payload,
-        });
+        const response = await fetch(scriptURL, { method: 'POST', body: payload });
+        if (!response.ok) throw new Error('Koneksi server gagal');
 
-        if (!response.ok) throw new Error(`Server error: ${response.status}`);
-
-        // Tampilkan halaman sukses
+        // Sukses
         showSuccess();
-
-        // Redirect otomatis ke WhatsApp setelah 2.5 detik
-        setTimeout(() => {
-          window.location.href = whatsappLink;
-        }, 2500);
+        
+        // Auto-redirect ke WA setelah 3 detik
+        setTimeout(() => { window.location.href = whatsappLink; }, 3000);
 
       } catch (err) {
-        console.error('Submit error:', err);
-        showError('Gagal mengirim data. Periksa koneksi internet kamu, lalu coba lagi.');
+        console.error(err);
+        showError('Transmisi gagal. Periksa koneksi jaringan Anda.');
         submitBtn.disabled = false;
-        submitBtn.innerHTML = 'Daftar Sekarang →';
+        submitBtn.innerHTML = 'INISIALISASI PENDAFTARAN';
       }
     });
 
     function showError(msg) {
-      errorMsg.textContent = msg;
-      errorMsg.classList.remove('hidden');
-    }
-
-    function hideError() {
-      errorMsg.classList.add('hidden');
+      errorText.textContent = msg;
+      errorBox.classList.remove('hidden');
+      // Efek getar saat error
+      formWrapper.classList.add('animate-bounce');
+      setTimeout(() => formWrapper.classList.remove('animate-bounce'), 500);
     }
 
     function showSuccess() {
-      // Sembunyikan card form, tampilkan card sukses
-      document.querySelector('.w-full.max-w-lg:not(#success-wrapper)').classList.add('hidden');
-      waBtn.href = whatsappLink;
-      successWrapper.classList.remove('hidden');
-      successWrapper.classList.add('flex', 'items-center', 'justify-center');
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      // Transisi Halus antar Form dan Sukses
+      formWrapper.style.opacity = '0';
+      formWrapper.style.transform = 'scale(0.95)';
+      
+      setTimeout(() => {
+        formWrapper.classList.add('hidden');
+        waBtn.href = whatsappLink;
+        successWrapper.classList.remove('hidden');
+        
+        // Animasi masuk untuk Success Card
+        successWrapper.animate([
+          { opacity: 0, transform: 'scale(0.95) translateY(10px)' },
+          { opacity: 1, transform: 'scale(1) translateY(0)' }
+        ], { duration: 400, fill: 'forwards', easing: 'cubic-bezier(0.4, 0, 0.2, 1)' });
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }, 300);
     }
   </script>
 </body>
