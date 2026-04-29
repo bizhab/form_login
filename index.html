@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Registrasi Seminar | HMJTI × Permikomnas</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="icon" type="image/jpeg" href="logo.jpeg">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -315,7 +314,8 @@
     themeBtn.onclick = () => { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark')?'dark':'light'); };
     if(localStorage.getItem('theme')==='dark') document.documentElement.classList.add('dark');
 
-    const scriptURL = atob("aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J3MGV2eTJncjZrVUZXcnZPb3M4LV9YbUla b1I0TWIyQzM4NzgtWHVNYm9qaXlSd0pmbHJuVC00QkM1MTFFbWRGci9leGVj");
+    // MENGHILANGKAN SPASI PADA BASE64 AGAR URL VALID
+    const scriptURL = atob("aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J3MGV2eTJncjZrVUZXcnZPb3M4LV9YbUlab1I0TWIyQzM4NzgtWHVNYm9qaXlSd0pmbHJuVC00QkM1MTFFbWRGci9leGVj");
     const waLink = "https://chat.whatsapp.com/IBGUSpAZZVp3kO3eGuHOTo";
 
     const form = document.getElementById('registrationForm');
@@ -341,14 +341,22 @@
       fd.set('jadwal', checkedJadwal.join(", "));
 
       try {
-        await fetch(scriptURL, { method: 'POST', body: fd });
+        const response = await fetch(scriptURL, { method: 'POST', body: fd });
+        
+        // Cek jika Google Script mengembalikan error server
+        if (!response.ok) {
+          throw new Error('Koneksi server gagal. Status: ' + response.status);
+        }
+
         document.getElementById('form-wrapper').classList.add('hidden');
         const success = document.getElementById('success-wrapper');
         success.classList.remove('hidden');
         document.getElementById('wa-btn').href = waLink;
-      } catch (i) {
-        btn.disabled = false; btn.innerHTML = "SUBMIT PENDAFTARAN";
-        err.textContent = "Gagal terhubung ke server. Coba lagi.";
+      } catch (error) {
+        console.error("Fetch Error Detail:", error);
+        btn.disabled = false; 
+        btn.innerHTML = "SUBMIT PENDAFTARAN";
+        err.textContent = "Gagal terhubung. Pastikan Akses Deployment diatur ke 'Siapa saja'.";
         err.classList.remove('hidden');
       }
     };
