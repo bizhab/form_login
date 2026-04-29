@@ -4,8 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Registrasi Seminar | HMJTI × Permikomnas</title>
-  <link rel="icon" type="image/jpeg" href="logo.jpeg">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" type="image/jpeg" href="logo.jpeg">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
@@ -15,16 +15,9 @@
       darkMode: 'class',
       theme: {
         extend: {
-          fontFamily: {
-            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
-          },
+          fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
           colors: {
-            cyber: {
-              blue: '#3b82f6',
-              red: '#ef4444',
-              dark: '#0f172a',
-              card: 'rgba(15, 23, 42, 0.7)'
-            }
+            cyber: { blue: '#3b82f6', red: '#ef4444', dark: '#0f172a', card: 'rgba(15, 23, 42, 0.7)' }
           }
         }
       }
@@ -33,449 +26,332 @@
 
   <style>
     :root {
-      /* Peningkatan Kontras untuk Light Mode */
-      --bg-color: #f1f5f9; /* Slate 100 - sedikit lebih gelap agar form putih menonjol */
+      /* LIGHT MODE PREMIUM (Frosted Glass / Apple Style) */
+      --bg-color: #f8fafc; 
+      /* Menambahkan gradasi cahaya lembut di background agar kaca terlihat membias */
+      --bg-gradient: 
+        radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.12), transparent 40%),
+        radial-gradient(circle at 85% 30%, rgba(239, 68, 68, 0.08), transparent 40%);
       --text-color: #0f172a;
-      --card-bg: rgba(255, 255, 255, 0.95); /* Putih hampir pekat */
-      --card-border: rgba(203, 213, 225, 0.8); /* Border abu-abu jelas */
-      --input-bg: #ffffff;
-      --input-border: rgba(148, 163, 184, 0.4);
-      --input-text: #0f172a;
-      --shadow-color: rgba(15, 23, 42, 0.12); /* Bayangan lebih tegas */
-      --autofill-bg: #ffffff; /* Warna background saat browser autofill */
+      
+      --card-bg: rgba(255, 255, 255, 0.65); /* Dibuat lebih transparan agar efek kaca keluar */
+      --card-border: rgba(255, 255, 255, 0.8);
+      
+      --input-bg: rgba(255, 255, 255, 0.5); /* Input semi transparan */
+      --input-border: rgba(15, 23, 42, 0.15); /* Garis tipis gelap ditambahkan agar form tidak menyatu */
+      --input-text: #0f172a; 
+      
+      --shadow-color: rgba(15, 23, 42, 0.06); /* Shadow lebih luas dan halus */
+      --autofill-bg: #ffffff;
     }
-    
     .dark {
-      --bg-color: #050b14;
+      /* DARK MODE CYBERPUNK (Tetap dipertahankan) */
+      --bg-color: #050b14; 
+      --bg-gradient: none; /* Polos di mode gelap karena partikel sudah cukup menyala */
       --text-color: #e2e8f0;
-      --card-bg: var(--tw-colors-cyber-card);
+      
+      --card-bg: var(--tw-colors-cyber-card); 
       --card-border: rgba(255, 255, 255, 0.1);
-      --input-bg: rgba(255, 255, 255, 0.05);
-      --input-border: rgba(255, 255, 255, 0.15);
-      --input-text: white;
-      --shadow-color: rgba(0, 0, 0, 0.5);
-      --autofill-bg: #0f172a; /* Warna gelap solid saat browser autofill di dark mode */
+      
+      --input-bg: rgba(255, 255, 255, 0.05); 
+      --input-border: rgba(255, 255, 255, 0.25); /* Dipertegas sedikit agar form lebih menonjol di gelap */
+      --input-text: white; 
+      
+      --shadow-color: rgba(0, 0, 0, 0.5); 
+      --autofill-bg: #0f172a;
     }
 
-    body {
-      margin: 0;
-      overflow-x: hidden;
-      background-color: var(--bg-color);
-      color: var(--text-color);
-      transition: background-color 0.4s ease, color 0.4s ease;
-    }
-
-    #circuit-canvas {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: -1;
-      pointer-events: none;
-    }
-
-    .glass-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--card-border);
-      /* Bayangan disesuaikan agar card terpisah dari background di Light Mode */
-      box-shadow: 0 20px 40px -10px var(--shadow-color), 0 0 0 1px var(--card-border) inset;
-      transition: background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
-    }
-
-    .cyber-input {
-      background: var(--input-bg);
-      border: 1px solid var(--input-border);
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      color: var(--input-text);
+    body { 
+      margin: 0; 
+      overflow-x: hidden; 
+      background-color: var(--bg-color); 
+      background-image: var(--bg-gradient);
+      background-attachment: fixed;
+      color: var(--text-color); 
+      transition: all 0.4s ease; 
     }
     
-    .cyber-input:focus {
-      outline: none;
-      background: var(--card-bg);
-      border-color: rgba(59, 130, 246, 0.6);
-      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15), inset 0 0 10px rgba(59, 130, 246, 0.05);
+    #circuit-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
+    
+    .glass-card { 
+      background: var(--card-bg); 
+      backdrop-filter: blur(24px); /* Efek blur ditingkatkan */
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--card-border); 
+      /* Inner shadow putih halus di ujung atas-kiri untuk efek kaca 3D */
+      box-shadow: 0 25px 50px -12px var(--shadow-color), inset 1px 1px 0px rgba(255,255,255,0.4); 
     }
 
-    /* FIX BROWSER AUTOFILL (Mencegah input berubah putih di Dark Mode) */
-    .cyber-input:-webkit-autofill,
-    .cyber-input:-webkit-autofill:hover, 
-    .cyber-input:-webkit-autofill:focus, 
-    .cyber-input:-webkit-autofill:active{
-        -webkit-box-shadow: 0 0 0 1000px var(--autofill-bg) inset !important;
-        -webkit-text-fill-color: var(--input-text) !important;
-        transition: background-color 5000s ease-in-out 0s; /* Hack untuk menjaga warna background */
+    .cyber-input { 
+      background: var(--input-bg); 
+      border: 1px solid var(--input-border); 
+      color: var(--input-text); 
+      transition: all 0.3s ease; 
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); /* Sedikit shadow ke dalam agar terlihat bisa diketik */
+    }
+    .cyber-input:focus { 
+      outline: none; 
+      background: var(--autofill-bg); 
+      border-color: #3b82f6; 
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15); 
     }
 
-    .cyber-button {
-      background: linear-gradient(135deg, #2563eb, #dc2626);
-      background-size: 200% 200%;
-      transition: all 0.4s ease;
-      position: relative;
-      overflow: hidden;
+    /* Custom Checkbox Cards */
+    .schedule-option { display: none; }
+    .schedule-card {
+      cursor: pointer; border: 2px solid var(--input-border); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      background: var(--input-bg); position: relative; overflow: hidden;
     }
-    .cyber-button::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(135deg, rgba(255,255,255,0.2), transparent);
-      opacity: 0;
-      transition: opacity 0.3s ease;
+    .schedule-option:checked + .schedule-card {
+      border-color: #3b82f6; background: rgba(59, 130, 246, 0.05);
+      box-shadow: 0 0 20px rgba(59, 130, 246, 0.15); transform: translateY(-2px);
     }
-    .cyber-button:hover:not(:disabled) {
-      background-position: 100% 100%;
-      box-shadow: 0 0 20px rgba(220, 38, 38, 0.4), 0 0 40px rgba(37, 99, 235, 0.4);
-      transform: translateY(-2px);
-    }
-    .cyber-button:hover:not(:disabled)::before {
-      opacity: 1;
-    }
-    .cyber-button:active:not(:disabled) {
-      transform: translateY(0);
-    }
-    .cyber-button:disabled {
-      opacity: 0.6;
-      cursor: not-allowed;
-      filter: grayscale(0.5);
-    }
+    .schedule-option:checked + .schedule-card .check-icon { opacity: 1; transform: scale(1); }
 
-    .spinner {
-      width: 18px; height: 18px;
-      border: 2px solid rgba(255,255,255,0.2);
-      border-top-color: #fff;
-      border-radius: 50%;
-      display: inline-block;
-      animation: spin 0.8s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-      margin-right: 10px;
-      vertical-align: middle;
-    }
+    .cyber-button { background: linear-gradient(135deg, #2563eb, #dc2626); background-size: 200%; transition: 0.4s; }
+    .cyber-button:hover:not(:disabled) { background-position: right center; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3); }
+
+    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+    .animate-float { animation: float 4s ease-in-out infinite; }
+    .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.2); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; margin-right: 8px; }
     @keyframes spin { to { transform: rotate(360deg); } }
-
-    ::-webkit-scrollbar { width: 8px; }
-    ::-webkit-scrollbar-track { background: var(--bg-color); }
-    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-    .dark ::-webkit-scrollbar-thumb { background: #1e293b; }
-    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
-    .dark ::-webkit-scrollbar-thumb:hover { background: #334155; }
-    select option { background-color: var(--bg-color); color: var(--text-color); }
   </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-4 sm:p-8 transition-colors duration-500">
+<body class="flex items-center justify-center min-h-screen p-4 sm:p-8">
 
-  <!-- Tombol Toggle Tema -->
-  <button id="themeToggle" class="fixed top-4 right-4 z-50 p-3 rounded-full glass-card hover:scale-110 transition-transform shadow-lg group">
-    <!-- Icon Moon (Gelap) - Tampil di tema Terang -->
-    <svg id="icon-moon" class="w-6 h-6 text-slate-800 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-    </svg>
-    <!-- Icon Sun (Terang) - Tampil di tema Gelap -->
-    <svg id="icon-sun" class="w-6 h-6 text-yellow-400 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-    </svg>
+  <button id="themeToggle" class="fixed top-4 right-4 z-50 p-3 rounded-full glass-card hover:scale-110 transition-all shadow-lg">
+    <svg id="icon-moon" class="w-6 h-6 text-slate-800 dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+    <svg id="icon-sun" class="w-6 h-6 text-yellow-400 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
   </button>
 
-  <!-- Latar Belakang Rangkaian -->
   <canvas id="circuit-canvas"></canvas>
 
-  <main class="w-full max-w-lg relative z-10 mt-4 mb-12">
+  <main class="w-full max-w-lg relative z-10 mt-8 mb-12">
     
-    <!-- MAIN FORM CARD -->
     <div id="form-wrapper" class="glass-card rounded-3xl overflow-hidden relative transition-all duration-500">
-      
-      <!-- Aksen Cahaya di atas Card -->
-      <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 via-purple-500 to-red-500 opacity-80"></div>
+      <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-500 via-purple-500 to-red-500 opacity-80"></div>
 
       <div class="p-8 sm:p-10">
         <div class="text-center mb-8">
           <p class="text-xs font-bold tracking-widest text-slate-500 dark:text-slate-400 uppercase mb-2">Seminar Tech</p>
-          <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-red-600 dark:from-blue-400 dark:to-red-400 mb-3">
-            Sistem Registrasi
-          </h1>
-          <p class="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-            Inisialisasi data peserta. Harap isi dengan kredensial yang valid untuk mendapatkan akses ke jaringan grup resmi.
-          </p>
+          <h1 class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-red-600 dark:from-blue-400 dark:to-red-400">Registrasi Sesi</h1>
         </div>
 
-        <form id="registrationForm" novalidate>
-          
-          <!-- Nama Lengkap -->
-          <div class="mb-5">
-            <label for="nama" class="block text-sm font-semibold text-slate-800 dark:text-slate-300 mb-2">
-              Nama Lengkap <span class="text-red-500">*</span>
-            </label>
-            <input type="text" id="nama" name="nama" required placeholder="Masukkan nama..."
-              class="cyber-input w-full rounded-xl px-4 py-3 text-sm placeholder-slate-400 dark:placeholder-slate-500" />
+        <form id="registrationForm" class="space-y-5">
+          <div>
+            <label class="block text-sm font-semibold mb-2">Nama Lengkap <span class="text-red-500">*</span></label>
+            <input type="text" name="nama" required class="cyber-input w-full rounded-xl px-4 py-3 text-sm" placeholder="Masukkan nama..." />
           </div>
 
-          <!-- Instansi -->
-          <div class="mb-5">
-            <label for="instansi" class="block text-sm font-semibold text-slate-800 dark:text-slate-300 mb-2">
-              Instansi / Universitas <span class="text-red-500">*</span>
-            </label>
-            <input type="text" id="instansi" name="instansi" required placeholder="Contoh: UIN Alauddin Makassar"
-              class="cyber-input w-full rounded-xl px-4 py-3 text-sm placeholder-slate-400 dark:placeholder-slate-500" />
+          <div>
+            <label class="block text-sm font-semibold mb-2">Instansi <span class="text-red-500">*</span></label>
+            <input type="text" name="instansi" required class="cyber-input w-full rounded-xl px-4 py-3 text-sm" placeholder="Contoh: UIN Alauddin" />
           </div>
 
-          <!-- Jenis Kelamin -->
-          <div class="mb-5">
-            <label for="jenisKelamin" class="block text-sm font-semibold text-slate-800 dark:text-slate-300 mb-2">
-              Jenis Kelamin <span class="text-red-500">*</span>
+          <div>
+            <label class="block text-sm font-semibold mb-3">
+              Pilih Sesi Kehadiran <span class="text-red-500">*</span> 
+              <span class="text-xs font-normal text-slate-500 dark:text-slate-400 ml-1">(Bisa pilih keduanya)</span>
             </label>
-            <div class="relative">
-              <select id="jenisKelamin" name="jenisKelamin" required
-                class="cyber-input w-full rounded-xl px-4 py-3 text-sm appearance-none">
-                <option value="" disabled selected class="text-slate-400 dark:text-slate-500">Pilih identitas</option>
-                <option value="Laki-laki">Laki-laki</option>
-                <option value="Perempuan">Perempuan</option>
-              </select>
-              <div class="pointer-events-none absolute inset-y-0 right-4 flex items-center text-slate-500 dark:text-slate-400">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
-              </div>
+            <div class="grid grid-cols-2 gap-3">
+              <label class="relative">
+                <input type="checkbox" name="jadwal" value="Kamis" class="schedule-option">
+                <div class="schedule-card p-4 rounded-2xl text-center">
+                  <div class="text-lg font-bold text-blue-500">Kamis</div>
+                  <div class="text-[10px] text-slate-500 uppercase tracking-tighter">30 April 2026</div>
+                  <div class="check-icon opacity-0 scale-50 transition-all absolute top-2 right-2 text-blue-500">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
+                  </div>
+                </div>
+              </label>
+              <label class="relative">
+                <input type="checkbox" name="jadwal" value="Jumat" class="schedule-option">
+                <div class="schedule-card p-4 rounded-2xl text-center">
+                  <div class="text-lg font-bold text-red-500">Jumat</div>
+                  <div class="text-[10px] text-slate-500 uppercase tracking-tighter">1 Mei 2026</div>
+                  <div class="check-icon opacity-0 scale-50 transition-all absolute top-2 right-2 text-red-500">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
+                  </div>
+                </div>
+              </label>
             </div>
           </div>
 
-          <!-- Saran -->
-          <div class="mb-8">
-            <label for="saran" class="block text-sm font-semibold text-slate-800 dark:text-slate-300 mb-2">
-              Feedback / Harapan <span class="text-xs font-normal text-slate-500 ml-1">(Opsional)</span>
-            </label>
-            <textarea id="saran" name="saran" rows="3" placeholder="Tuliskan pesan untuk sistem..."
-              class="cyber-input w-full rounded-xl px-4 py-3 text-sm placeholder-slate-400 dark:placeholder-slate-500 resize-none"></textarea>
+          <div>
+            <label class="block text-sm font-semibold mb-2">Jenis Kelamin <span class="text-red-500">*</span></label>
+            <select name="jenisKelamin" required class="cyber-input w-full rounded-xl px-4 py-3 text-sm appearance-none">
+              <option value="" disabled selected>Pilih identitas</option>
+              <option value="Laki-laki">Laki-laki</option>
+              <option value="Perempuan">Perempuan</option>
+            </select>
           </div>
 
-          <!-- Error Alert -->
-          <div id="error-msg" class="hidden mb-6 bg-red-100 dark:bg-red-500/10 border border-red-300 dark:border-red-500/50 text-red-600 dark:text-red-400 text-sm rounded-lg px-4 py-3 flex items-start gap-3">
-            <svg class="w-5 h-5 shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-            <span id="error-text">Terjadi kesalahan pada sistem.</span>
+          <div>
+            <label class="block text-sm font-semibold mb-2">Saran/Harapan <span class="text-xs font-normal text-slate-400 ml-1">(Opsional)</span></label>
+            <textarea name="saran" rows="2" class="cyber-input w-full rounded-xl px-4 py-3 text-sm resize-none" placeholder="Pesan untuk sistem..."></textarea>
           </div>
 
-          <!-- Submit Button -->
-          <button type="submit" id="submitBtn" class="cyber-button w-full text-white font-bold rounded-xl py-4 text-sm flex justify-center items-center shadow-lg">
-            INISIALISASI PENDAFTARAN
+          <div id="error-msg" class="hidden bg-red-500/10 border border-red-500/50 text-red-500 text-xs rounded-xl p-3"></div>
+
+          <button type="submit" id="submitBtn" class="cyber-button w-full text-white font-bold rounded-xl py-4 text-sm shadow-xl">
+            SUBMIT PENDAFTARAN
           </button>
         </form>
       </div>
     </div>
 
-    <!-- SUCCESS CARD (Hidden initially) -->
-    <div id="success-wrapper" class="hidden glass-card rounded-3xl overflow-hidden relative">
-      <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-400 to-green-400 opacity-80"></div>
-      <div class="p-10 text-center">
-        <!-- Animated Success Ring -->
-        <div class="relative w-24 h-24 mx-auto mb-6">
-          <div class="absolute inset-0 border-4 border-blue-500/20 rounded-full"></div>
-          <div class="absolute inset-0 border-4 border-blue-500 dark:border-blue-400 rounded-full border-t-transparent animate-spin"></div>
-          <div class="absolute inset-0 flex items-center justify-center">
-            <svg class="w-10 h-10 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
-            </svg>
-          </div>
-        </div>
-        
-        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-3">Otorisasi Berhasil</h2>
-        <p class="text-sm text-slate-600 dark:text-slate-400 mb-8 leading-relaxed">
-          Data Anda telah terekam di sistem kami. Akses menuju jaringan komunikasi (WhatsApp) telah dibuka.
-        </p>
-        
-        <a id="wa-btn" href="#" target="_blank" rel="noopener noreferrer" 
-           class="inline-flex items-center justify-center gap-2 w-full bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 border border-slate-300 dark:border-slate-600 text-slate-900 dark:text-white font-semibold rounded-xl py-4 text-sm transition-all shadow-[0_0_15px_rgba(0,0,0,0.05)] dark:shadow-[0_0_15px_rgba(255,255,255,0.05)] hover:shadow-[0_0_20px_rgba(37,99,235,0.2)] hover:border-blue-500">
-           <svg class="w-5 h-5 text-green-500 dark:text-green-400" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
-          </svg>
-          Mulai Sesi WhatsApp
-        </a>
+    <div id="success-wrapper" class="hidden glass-card rounded-3xl p-10 text-center animate-float">
+      <div class="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6 text-green-500">
+        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
       </div>
+      <h2 class="text-2xl font-bold mb-2">Berhasil Terdaftar!</h2>
+      <p class="text-sm text-slate-500 mb-8">Data kamu telah diproses. Silakan bergabung ke grup koordinasi.</p>
+      <a id="wa-btn" href="#" class="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-lg">Buka WhatsApp</a>
     </div>
 
-    <!-- Footer -->
-    <div class="mt-8 text-center text-xs text-slate-500 dark:text-slate-600 tracking-wide font-semibold">
-      SYSTEM v1.0 • PERMIKOMNAS × HMJTI FST UINAM
+    <div class="mt-8 text-center text-[10px] font-bold text-slate-500 tracking-widest uppercase">
+      HMJTI × PERMIKOMNAS
     </div>
   </main>
 
-  <!-- ========================================== -->
-  <!-- KODE JAVASCRIPT: Animasi Canvas & Form API -->
-  <!-- ========================================== -->
   <script>
-    /* --- 1. ANIMASI RANGKAIAN ELEKTRONIK (CANVAS) --- */
+    // --- CANVAS ANIMATION (Particle Network Interaktif) ---
     const canvas = document.getElementById('circuit-canvas');
     const ctx = canvas.getContext('2d');
+    let width, height, particles = [];
     
-    let width, height;
-    let particles = [];
-    const colors = ['rgba(59, 130, 246, ', 'rgba(239, 68, 68, ']; // Blue & Red
+    // Interaksi Mouse
+    let mouse = { x: null, y: null, radius: 150 };
+    window.addEventListener('mousemove', function(event) {
+      mouse.x = event.x;
+      mouse.y = event.y;
+    });
+    window.addEventListener('mouseout', function() {
+      mouse.x = null;
+      mouse.y = null;
+    });
 
-    function resize() {
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
+    function resize() { 
+      width = canvas.width = window.innerWidth; 
+      height = canvas.height = window.innerHeight; 
+      initParticles(); 
     }
+    window.addEventListener('resize', resize); 
 
-    class Particle {
-      constructor() {
-        this.x = Math.random() * width;
-        this.y = Math.random() * height;
-        this.vx = (Math.random() - 0.5) * 0.8;
-        this.vy = (Math.random() - 0.5) * 0.8;
-        this.radius = Math.random() * 2 + 1;
-        this.baseColor = colors[Math.floor(Math.random() * colors.length)];
+    class P {
+      constructor() { 
+        this.x = Math.random()*width; 
+        this.y = Math.random()*height; 
+        this.vx = (Math.random()-0.5)*1; 
+        this.vy = (Math.random()-0.5)*1; 
+        this.size = Math.random()*2 + 1;
       }
-      update() {
-        this.x += this.vx;
-        this.y += this.vy;
-        if (this.x < 0 || this.x > width) this.vx *= -1;
-        if (this.y < 0 || this.y > height) this.vy *= -1;
-      }
-      draw() {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-        ctx.fillStyle = this.baseColor + '0.8)';
-        ctx.fill();
+      draw() { 
+        ctx.beginPath(); 
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); 
+        ctx.fillStyle = document.documentElement.classList.contains('dark') ? 'rgba(59,130,246,0.6)' : 'rgba(59,130,246,0.5)'; 
+        ctx.fill(); 
       }
     }
 
     function initParticles() {
       particles = [];
-      const particleCount = Math.floor((width * height) / 15000);
-      for (let i = 0; i < particleCount; i++) {
-        particles.push(new Particle());
-      }
+      let numberOfParticles = (width * height) / 9000; 
+      for(let i=0; i<numberOfParticles; i++) particles.push(new P());
     }
-
-    function animateCanvas() {
-      ctx.clearRect(0, 0, width, height);
-      
-      particles.forEach(p => {
-        p.update();
-        p.draw();
-      });
-
+    
+    function anim() {
+      ctx.clearRect(0,0,width,height);
       const isDark = document.documentElement.classList.contains('dark');
+
       for (let i = 0; i < particles.length; i++) {
-        for (let j = i + 1; j < particles.length; j++) {
-          const dx = particles[i].x - particles[j].x;
-          const dy = particles[i].y - particles[j].y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+        let p = particles[i];
+        p.x += p.vx; p.y += p.vy;
+        
+        if(p.x < 0 || p.x > width) p.vx *= -1; 
+        if(p.y < 0 || p.y > height) p.vy *= -1;
+        p.draw();
+
+        for (let j = i; j < particles.length; j++) {
+          let p2 = particles[j];
+          let dx = p.x - p2.x;
+          let dy = p.y - p2.y;
+          let distance = Math.sqrt(dx * dx + dy * dy);
           
-          if (distance < 120) {
+          if (distance < 110) {
             ctx.beginPath();
-            ctx.moveTo(particles[i].x, particles[i].y);
-            ctx.lineTo(particles[j].x, particles[j].y);
-            const opacity = 1 - (distance / 120);
-            ctx.strokeStyle = isDark ? `rgba(100, 150, 255, ${opacity * 0.2})` : `rgba(59, 130, 246, ${opacity * 0.15})`;
+            ctx.strokeStyle = isDark ? `rgba(59, 130, 246, ${1 - distance/110})` : `rgba(59, 130, 246, ${0.5 - distance/220})`;
             ctx.lineWidth = 1;
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.stroke();
+          }
+        }
+
+        if (mouse.x != null && mouse.y != null) {
+          let dxMouse = p.x - mouse.x;
+          let dyMouse = p.y - mouse.y;
+          let distanceMouse = Math.sqrt(dxMouse*dxMouse + dyMouse*dyMouse);
+          if (distanceMouse < mouse.radius) {
+            ctx.beginPath();
+            ctx.strokeStyle = isDark ? `rgba(239, 68, 68, ${0.8 - distanceMouse/mouse.radius})` : `rgba(239, 68, 68, ${0.5 - distanceMouse/(mouse.radius*1.5)})`; 
+            ctx.lineWidth = 1.2;
+            ctx.moveTo(p.x, p.y);
+            ctx.lineTo(mouse.x, mouse.y);
             ctx.stroke();
           }
         }
       }
-      requestAnimationFrame(animateCanvas);
+      requestAnimationFrame(anim);
     }
-
-    window.addEventListener('resize', () => { resize(); initParticles(); });
-    resize();
-    initParticles();
-    animateCanvas();
-
-    /* --- THEME TOGGLE LOGIC --- */
-    const themeToggleBtn = document.getElementById('themeToggle');
     
-    if (!localStorage.getItem('theme')) {
-      localStorage.setItem('theme', 'light');
-    }
+    width = canvas.width = window.innerWidth; 
+    height = canvas.height = window.innerHeight;
+    initParticles();
+    anim();
 
-    if (localStorage.getItem('theme') === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
+    // --- LOGIC ---
+    const themeBtn = document.getElementById('themeToggle');
+    themeBtn.onclick = () => { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark')?'dark':'light'); };
+    if(localStorage.getItem('theme')==='dark') document.documentElement.classList.add('dark');
 
-    themeToggleBtn.addEventListener('click', () => {
-      document.documentElement.classList.toggle('dark');
-      if (document.documentElement.classList.contains('dark')) {
-        localStorage.setItem('theme', 'dark');
-      } else {
-        localStorage.setItem('theme', 'light');
-      }
-    });
+    const scriptURL = atob("aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J3MGV2eTJncjZrVUZXcnZPb3M4LV9YbUla b1I0TWIyQzM4NzgtWHVNYm9qaXlSd0pmbHJuVC00QkM1MTFFbWRGci9leGVj");
+    const waLink = "https://chat.whatsapp.com/IBGUSpAZZVp3kO3eGuHOTo";
 
-    /* --- 2. LOGIKA FORM PENDAFTARAN & API --- */
-    // Konfigurasi URL - GANTI DENGAN KODE BASE64 KAMU!
-    const encodedURL   = "aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J5UWFRM003WGwzMmNWMkxWNldIYnd4ZlNBZllwckRZNTZYSHM1M2YteHNoU1FEVG1tY3lJRGMtU3lxUVVwTHNJOEEvZXhlYw==";
-    const scriptURL    = atob(encodedURL); // atob() otomatis mengubah sandi kembali menjadi URL asli saat script berjalan
-    const whatsappLink = "https://chat.whatsapp.com/IBGUSpAZZVp3kO3eGuHOTo";  // Link undangan grup WhatsApp
-    // =============================================
+    const form = document.getElementById('registrationForm');
+    const btn = document.getElementById('submitBtn');
+    const err = document.getElementById('error-msg');
 
-    const form          = document.getElementById('registrationForm');
-    const submitBtn     = document.getElementById('submitBtn');
-    const errorBox      = document.getElementById('error-msg');
-    const errorText     = document.getElementById('error-text');
-    const formWrapper   = document.getElementById('form-wrapper');
-    const successWrapper= document.getElementById('success-wrapper');
-    const waBtn         = document.getElementById('wa-btn');
-
-    form.addEventListener('submit', async function (e) {
+    form.onsubmit = async (e) => {
       e.preventDefault();
-
-      const nama         = form.nama.value.trim();
-      const instansi     = form.instansi.value.trim();
-      const jenisKelamin = form.jenisKelamin.value;
-      const saran        = form.saran.value.trim();
-
-      if (!nama || !instansi || !jenisKelamin) {
-        showError('Data tidak lengkap. Harap isi semua parameter wajib.');
+      
+      const checkedJadwal = Array.from(form.querySelectorAll('input[name="jadwal"]:checked')).map(cb => cb.value);
+      
+      if(checkedJadwal.length === 0) {
+        err.textContent = "Mohon pilih minimal satu sesi kehadiran.";
+        err.classList.remove('hidden');
         return;
       }
 
-      errorBox.classList.add('hidden');
-      submitBtn.disabled = true;
-      submitBtn.innerHTML = '<span class="spinner"></span>MENSTRANSMISIKAN DATA...';
+      err.classList.add('hidden');
+      btn.disabled = true;
+      btn.innerHTML = `<span class="spinner"></span>MEMPROSES...`;
 
-      const payload = new FormData();
-      payload.append('nama', nama);
-      payload.append('instansi', instansi);
-      payload.append('jenisKelamin', jenisKelamin);
-      payload.append('saran', saran);
+      const fd = new FormData(form);
+      fd.set('jadwal', checkedJadwal.join(", "));
 
       try {
-        const response = await fetch(scriptURL, { method: 'POST', body: payload });
-        if (!response.ok) throw new Error('Koneksi server gagal');
-
-        showSuccess();
-        setTimeout(() => { window.location.href = whatsappLink; }, 3000);
-
-      } catch (err) {
-        console.error(err);
-        showError('Transmisi gagal. Periksa koneksi jaringan Anda.');
-        submitBtn.disabled = false;
-        submitBtn.innerHTML = 'INISIALISASI PENDAFTARAN';
+        await fetch(scriptURL, { method: 'POST', body: fd });
+        document.getElementById('form-wrapper').classList.add('hidden');
+        const success = document.getElementById('success-wrapper');
+        success.classList.remove('hidden');
+        document.getElementById('wa-btn').href = waLink;
+      } catch (i) {
+        btn.disabled = false; btn.innerHTML = "SUBMIT PENDAFTARAN";
+        err.textContent = "Gagal terhubung ke server. Coba lagi.";
+        err.classList.remove('hidden');
       }
-    });
-
-    function showError(msg) {
-      errorText.textContent = msg;
-      errorBox.classList.remove('hidden');
-      formWrapper.classList.add('animate-bounce');
-      setTimeout(() => formWrapper.classList.remove('animate-bounce'), 500);
-    }
-
-    function showSuccess() {
-      formWrapper.style.opacity = '0';
-      formWrapper.style.transform = 'scale(0.95)';
-      
-      setTimeout(() => {
-        formWrapper.classList.add('hidden');
-        waBtn.href = whatsappLink;
-        successWrapper.classList.remove('hidden');
-        
-        successWrapper.animate([
-          { opacity: 0, transform: 'scale(0.95) translateY(10px)' },
-          { opacity: 1, transform: 'scale(1) translateY(0)' }
-        ], { duration: 400, fill: 'forwards', easing: 'cubic-bezier(0.4, 0, 0.2, 1)' });
-        
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }, 300);
-    }
+    };
   </script>
 </body>
 </html>
