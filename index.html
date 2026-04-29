@@ -25,81 +25,56 @@
 
   <style>
     :root {
-      /* LIGHT MODE PREMIUM (Frosted Glass / Apple Style) */
       --bg-color: #f8fafc; 
-      /* Menambahkan gradasi cahaya lembut di background agar kaca terlihat membias */
       --bg-gradient: 
         radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.12), transparent 40%),
         radial-gradient(circle at 85% 30%, rgba(239, 68, 68, 0.08), transparent 40%);
       --text-color: #0f172a;
-      
-      --card-bg: rgba(255, 255, 255, 0.65); /* Dibuat lebih transparan agar efek kaca keluar */
+      --card-bg: rgba(255, 255, 255, 0.65); 
       --card-border: rgba(255, 255, 255, 0.8);
-      
-      --input-bg: rgba(255, 255, 255, 0.5); /* Input semi transparan */
-      --input-border: rgba(15, 23, 42, 0.15); /* Garis tipis gelap ditambahkan agar form tidak menyatu */
+      --input-bg: rgba(255, 255, 255, 0.5); 
+      --input-border: rgba(15, 23, 42, 0.15);
       --input-text: #0f172a; 
-      
-      --shadow-color: rgba(15, 23, 42, 0.06); /* Shadow lebih luas dan halus */
+      --shadow-color: rgba(15, 23, 42, 0.06); 
       --autofill-bg: #ffffff;
     }
     .dark {
-      /* DARK MODE CYBERPUNK (Tetap dipertahankan) */
       --bg-color: #050b14; 
-      --bg-gradient: none; /* Polos di mode gelap karena partikel sudah cukup menyala */
+      --bg-gradient: none;
       --text-color: #e2e8f0;
-      
       --card-bg: var(--tw-colors-cyber-card); 
       --card-border: rgba(255, 255, 255, 0.1);
-      
       --input-bg: rgba(255, 255, 255, 0.05); 
-      --input-border: rgba(255, 255, 255, 0.25); /* Dipertegas sedikit agar form lebih menonjol di gelap */
+      --input-border: rgba(255, 255, 255, 0.25);
       --input-text: white; 
-      
       --shadow-color: rgba(0, 0, 0, 0.5); 
       --autofill-bg: #0f172a;
     }
 
     body { 
-      margin: 0; 
-      overflow-x: hidden; 
-      background-color: var(--bg-color); 
-      background-image: var(--bg-gradient);
-      background-attachment: fixed;
-      color: var(--text-color); 
-      transition: all 0.4s ease; 
+      margin: 0; overflow-x: hidden; background-color: var(--bg-color); 
+      background-image: var(--bg-gradient); background-attachment: fixed;
+      color: var(--text-color); transition: all 0.4s ease; 
     }
     
     #circuit-canvas { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; z-index: -1; pointer-events: none; }
     
     .glass-card { 
-      background: var(--card-bg); 
-      backdrop-filter: blur(24px); /* Efek blur ditingkatkan */
-      -webkit-backdrop-filter: blur(24px);
+      background: var(--card-bg); backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
       border: 1px solid var(--card-border); 
-      /* Inner shadow putih halus di ujung atas-kiri untuk efek kaca 3D */
       box-shadow: 0 25px 50px -12px var(--shadow-color), inset 1px 1px 0px rgba(255,255,255,0.4); 
     }
 
     .cyber-input { 
-      background: var(--input-bg); 
-      border: 1px solid var(--input-border); 
-      color: var(--input-text); 
-      transition: all 0.3s ease; 
-      box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); /* Sedikit shadow ke dalam agar terlihat bisa diketik */
+      background: var(--input-bg); border: 1px solid var(--input-border); 
+      color: var(--input-text); transition: all 0.3s ease; 
     }
-    .cyber-input:focus { 
-      outline: none; 
-      background: var(--autofill-bg); 
-      border-color: #3b82f6; 
-      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15); 
-    }
+    .cyber-input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.15); }
 
-    /* Custom Checkbox Cards */
     .schedule-option { display: none; }
     .schedule-card {
       cursor: pointer; border: 2px solid var(--input-border); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      background: var(--input-bg); position: relative; overflow: hidden;
+      background: var(--input-bg); position: relative;
     }
     .schedule-option:checked + .schedule-card {
       border-color: #3b82f6; background: rgba(59, 130, 246, 0.05);
@@ -108,10 +83,8 @@
     .schedule-option:checked + .schedule-card .check-icon { opacity: 1; transform: scale(1); }
 
     .cyber-button { background: linear-gradient(135deg, #2563eb, #dc2626); background-size: 200%; transition: 0.4s; }
-    .cyber-button:hover:not(:disabled) { background-position: right center; transform: translateY(-2px); box-shadow: 0 10px 20px rgba(37, 99, 235, 0.3); }
+    .cyber-button:hover:not(:disabled) { background-position: right center; transform: translateY(-2px); }
 
-    @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-    .animate-float { animation: float 4s ease-in-out infinite; }
     .spinner { width: 18px; height: 18px; border: 2px solid rgba(255,255,255,0.2); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; display: inline-block; margin-right: 8px; }
     @keyframes spin { to { transform: rotate(360deg); } }
   </style>
@@ -126,10 +99,8 @@
   <canvas id="circuit-canvas"></canvas>
 
   <main class="w-full max-w-lg relative z-10 mt-8 mb-12">
-    
     <div id="form-wrapper" class="glass-card rounded-3xl overflow-hidden relative transition-all duration-500">
       <div class="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-blue-500 via-purple-500 to-red-500 opacity-80"></div>
-
       <div class="p-8 sm:p-10">
         <div class="text-center mb-8">
           <p class="text-xs font-bold tracking-widest text-slate-500 dark:text-slate-400 uppercase mb-2">Seminar Tech</p>
@@ -141,26 +112,19 @@
             <label class="block text-sm font-semibold mb-2">Nama Lengkap <span class="text-red-500">*</span></label>
             <input type="text" name="nama" required class="cyber-input w-full rounded-xl px-4 py-3 text-sm" placeholder="Masukkan nama..." />
           </div>
-
           <div>
             <label class="block text-sm font-semibold mb-2">Instansi <span class="text-red-500">*</span></label>
             <input type="text" name="instansi" required class="cyber-input w-full rounded-xl px-4 py-3 text-sm" placeholder="Contoh: UIN Alauddin" />
           </div>
-
           <div>
-            <label class="block text-sm font-semibold mb-3">
-              Pilih Sesi Kehadiran <span class="text-red-500">*</span> 
-              <span class="text-xs font-normal text-slate-500 dark:text-slate-400 ml-1">(Bisa pilih keduanya)</span>
-            </label>
+            <label class="block text-sm font-semibold mb-3">Pilih Sesi Kehadiran <span class="text-red-500">*</span> <span class="text-xs font-normal text-slate-500 dark:text-slate-400 ml-1">(Bisa pilih keduanya)</span></label>
             <div class="grid grid-cols-2 gap-3">
               <label class="relative">
                 <input type="checkbox" name="jadwal" value="Kamis" class="schedule-option">
                 <div class="schedule-card p-4 rounded-2xl text-center">
                   <div class="text-lg font-bold text-blue-500">Kamis</div>
                   <div class="text-[10px] text-slate-500 uppercase tracking-tighter">30 April 2026</div>
-                  <div class="check-icon opacity-0 scale-50 transition-all absolute top-2 right-2 text-blue-500">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
-                  </div>
+                  <div class="check-icon opacity-0 scale-50 transition-all absolute top-2 right-2 text-blue-500"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg></div>
                 </div>
               </label>
               <label class="relative">
@@ -168,14 +132,11 @@
                 <div class="schedule-card p-4 rounded-2xl text-center">
                   <div class="text-lg font-bold text-red-500">Jumat</div>
                   <div class="text-[10px] text-slate-500 uppercase tracking-tighter">1 Mei 2026</div>
-                  <div class="check-icon opacity-0 scale-50 transition-all absolute top-2 right-2 text-red-500">
-                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg>
-                  </div>
+                  <div class="check-icon opacity-0 scale-50 transition-all absolute top-2 right-2 text-red-500"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"/></svg></div>
                 </div>
               </label>
             </div>
           </div>
-
           <div>
             <label class="block text-sm font-semibold mb-2">Jenis Kelamin <span class="text-red-500">*</span></label>
             <select name="jenisKelamin" required class="cyber-input w-full rounded-xl px-4 py-3 text-sm appearance-none">
@@ -184,22 +145,17 @@
               <option value="Perempuan">Perempuan</option>
             </select>
           </div>
-
           <div>
             <label class="block text-sm font-semibold mb-2">Saran/Harapan <span class="text-xs font-normal text-slate-400 ml-1">(Opsional)</span></label>
             <textarea name="saran" rows="2" class="cyber-input w-full rounded-xl px-4 py-3 text-sm resize-none" placeholder="Pesan untuk sistem..."></textarea>
           </div>
-
           <div id="error-msg" class="hidden bg-red-500/10 border border-red-500/50 text-red-500 text-xs rounded-xl p-3"></div>
-
-          <button type="submit" id="submitBtn" class="cyber-button w-full text-white font-bold rounded-xl py-4 text-sm shadow-xl">
-            SUBMIT PENDAFTARAN
-          </button>
+          <button type="submit" id="submitBtn" class="cyber-button w-full text-white font-bold rounded-xl py-4 text-sm shadow-xl">SUBMIT PENDAFTARAN</button>
         </form>
       </div>
     </div>
 
-    <div id="success-wrapper" class="hidden glass-card rounded-3xl p-10 text-center animate-float">
+    <div id="success-wrapper" class="hidden glass-card rounded-3xl p-10 text-center">
       <div class="w-20 h-20 bg-green-500/20 rounded-full flex items-center justify-center mx-auto mb-6 text-green-500">
         <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/></svg>
       </div>
@@ -208,113 +164,57 @@
       <a id="wa-btn" href="#" class="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-lg">Buka WhatsApp</a>
     </div>
 
-    <div class="mt-8 text-center text-[10px] font-bold text-slate-500 tracking-widest uppercase">
-      HMJTI × PERMIKOMNAS
-    </div>
+    <div class="mt-8 text-center text-[10px] font-bold text-slate-500 tracking-widest uppercase">HMJTI × PERMIKOMNAS</div>
   </main>
 
   <script>
-    // --- CANVAS ANIMATION (Particle Network Interaktif) ---
     const canvas = document.getElementById('circuit-canvas');
     const ctx = canvas.getContext('2d');
     let width, height, particles = [];
-    
-    // Interaksi Mouse
     let mouse = { x: null, y: null, radius: 150 };
-    window.addEventListener('mousemove', function(event) {
-      mouse.x = event.x;
-      mouse.y = event.y;
-    });
-    window.addEventListener('mouseout', function() {
-      mouse.x = null;
-      mouse.y = null;
-    });
+    window.addEventListener('mousemove', e => { mouse.x = e.x; mouse.y = e.y; });
+    window.addEventListener('mouseout', () => { mouse.x = null; mouse.y = null; });
 
-    function resize() { 
-      width = canvas.width = window.innerWidth; 
-      height = canvas.height = window.innerHeight; 
-      initParticles(); 
-    }
+    function resize() { width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight; initParticles(); }
     window.addEventListener('resize', resize); 
 
     class P {
-      constructor() { 
-        this.x = Math.random()*width; 
-        this.y = Math.random()*height; 
-        this.vx = (Math.random()-0.5)*1; 
-        this.vy = (Math.random()-0.5)*1; 
-        this.size = Math.random()*2 + 1;
-      }
-      draw() { 
-        ctx.beginPath(); 
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); 
-        ctx.fillStyle = document.documentElement.classList.contains('dark') ? 'rgba(59,130,246,0.6)' : 'rgba(59,130,246,0.5)'; 
-        ctx.fill(); 
-      }
+      constructor() { this.x = Math.random()*width; this.y = Math.random()*height; this.vx = (Math.random()-0.5)*1; this.vy = (Math.random()-0.5)*1; this.size = Math.random()*2 + 1; }
+      draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI*2); ctx.fillStyle = document.documentElement.classList.contains('dark') ? 'rgba(59,130,246,0.6)' : 'rgba(59,130,246,0.5)'; ctx.fill(); }
     }
 
-    function initParticles() {
-      particles = [];
-      let numberOfParticles = (width * height) / 9000; 
-      for(let i=0; i<numberOfParticles; i++) particles.push(new P());
-    }
+    function initParticles() { particles = []; let n = (width * height) / 9000; for(let i=0; i<n; i++) particles.push(new P()); }
     
     function anim() {
       ctx.clearRect(0,0,width,height);
       const isDark = document.documentElement.classList.contains('dark');
-
       for (let i = 0; i < particles.length; i++) {
-        let p = particles[i];
-        p.x += p.vx; p.y += p.vy;
-        
-        if(p.x < 0 || p.x > width) p.vx *= -1; 
-        if(p.y < 0 || p.y > height) p.vy *= -1;
+        let p = particles[i]; p.x += p.vx; p.y += p.vy;
+        if(p.x < 0 || p.x > width) p.vx *= -1; if(p.y < 0 || p.y > height) p.vy *= -1;
         p.draw();
-
         for (let j = i; j < particles.length; j++) {
-          let p2 = particles[j];
-          let dx = p.x - p2.x;
-          let dy = p.y - p2.y;
-          let distance = Math.sqrt(dx * dx + dy * dy);
-          
-          if (distance < 110) {
-            ctx.beginPath();
-            ctx.strokeStyle = isDark ? `rgba(59, 130, 246, ${1 - distance/110})` : `rgba(59, 130, 246, ${0.5 - distance/220})`;
-            ctx.lineWidth = 1;
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(p2.x, p2.y);
-            ctx.stroke();
+          let p2 = particles[j]; let dx = p.x - p2.x; let dy = p.y - p2.y; let dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < 110) {
+            ctx.beginPath(); ctx.strokeStyle = isDark ? `rgba(59, 130, 246, ${1 - dist/110})` : `rgba(59, 130, 246, ${0.5 - dist/220})`;
+            ctx.lineWidth = 1; ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
           }
         }
-
-        if (mouse.x != null && mouse.y != null) {
-          let dxMouse = p.x - mouse.x;
-          let dyMouse = p.y - mouse.y;
-          let distanceMouse = Math.sqrt(dxMouse*dxMouse + dyMouse*dyMouse);
-          if (distanceMouse < mouse.radius) {
-            ctx.beginPath();
-            ctx.strokeStyle = isDark ? `rgba(239, 68, 68, ${0.8 - distanceMouse/mouse.radius})` : `rgba(239, 68, 68, ${0.5 - distanceMouse/(mouse.radius*1.5)})`; 
-            ctx.lineWidth = 1.2;
-            ctx.moveTo(p.x, p.y);
-            ctx.lineTo(mouse.x, mouse.y);
-            ctx.stroke();
+        if (mouse.x != null) {
+          let dxM = p.x - mouse.x; let dyM = p.y - mouse.y; let distM = Math.sqrt(dxM*dxM + dyM*dyM);
+          if (distM < mouse.radius) {
+            ctx.beginPath(); ctx.strokeStyle = isDark ? `rgba(239, 68, 68, ${0.8 - distM/mouse.radius})` : `rgba(239, 68, 68, ${0.5 - distM/(mouse.radius*1.5)})`; 
+            ctx.lineWidth = 1.2; ctx.moveTo(p.x, p.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
           }
         }
       }
       requestAnimationFrame(anim);
     }
-    
-    width = canvas.width = window.innerWidth; 
-    height = canvas.height = window.innerHeight;
-    initParticles();
-    anim();
+    resize(); anim();
 
-    // --- LOGIC ---
     const themeBtn = document.getElementById('themeToggle');
     themeBtn.onclick = () => { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark')?'dark':'light'); };
     if(localStorage.getItem('theme')==='dark') document.documentElement.classList.add('dark');
 
-    // URL SUDAH DIPERBARUI DENGAN ID DEPLOYMENT YANG BARU ANDA KIRIMKAN
     const scriptURL = atob("aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J5UWFRM003WGwzMmNWMkxWNldIYnd4ZlNBZllwckRZNTZYSHM1M2YteHNoU1FEVG1tY3lJRGMtU3lxUVVwTHNJOEEvZXhlYw==");
     const waLink = "https://chat.whatsapp.com/IBGUSpAZZVp3kO3eGuHOTo";
 
@@ -324,39 +224,18 @@
 
     form.onsubmit = async (e) => {
       e.preventDefault();
-      
       const checkedJadwal = Array.from(form.querySelectorAll('input[name="jadwal"]:checked')).map(cb => cb.value);
-      
-      if(checkedJadwal.length === 0) {
-        err.textContent = "Mohon pilih minimal satu sesi kehadiran.";
-        err.classList.remove('hidden');
-        return;
-      }
-
-      err.classList.add('hidden');
-      btn.disabled = true;
-      btn.innerHTML = `<span class="spinner"></span>MEMPROSES...`;
-
-      const fd = new FormData(form);
-      fd.set('jadwal', checkedJadwal.join(", "));
-
+      if(checkedJadwal.length === 0) { err.textContent = "Mohon pilih minimal satu sesi."; err.classList.remove('hidden'); return; }
+      err.classList.add('hidden'); btn.disabled = true; btn.innerHTML = `<span class="spinner"></span>MEMPROSES...`;
+      const fd = new FormData(form); fd.set('jadwal', checkedJadwal.join(", "));
       try {
-        const response = await fetch(scriptURL, { method: 'POST', body: fd });
-        
-        // Cek jika Google Script mengembalikan error server
-        if (!response.ok) {
-          throw new Error('Koneksi server gagal. Status: ' + response.status);
-        }
-
+        await fetch(scriptURL, { method: 'POST', body: fd });
         document.getElementById('form-wrapper').classList.add('hidden');
-        const success = document.getElementById('success-wrapper');
-        success.classList.remove('hidden');
+        document.getElementById('success-wrapper').classList.remove('hidden');
         document.getElementById('wa-btn').href = waLink;
       } catch (error) {
-        console.error("Fetch Error Detail:", error);
-        btn.disabled = false; 
-        btn.innerHTML = "SUBMIT PENDAFTARAN";
-        err.textContent = "Gagal terhubung. Pastikan Akses Deployment diatur ke 'Siapa saja'.";
+        btn.disabled = false; btn.innerHTML = "SUBMIT PENDAFTARAN";
+        err.textContent = "Gagal terhubung. Pastikan Deployment diatur ke 'Siapa saja'.";
         err.classList.remove('hidden');
       }
     };
