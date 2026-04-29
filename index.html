@@ -164,7 +164,6 @@
       <a id="wa-btn" href="#" class="inline-block bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-xl transition-all shadow-lg">Buka WhatsApp</a>
     </div>
 
-    <div class="mt-8 text-center text-[10px] font-bold text-slate-500 tracking-widest uppercase">HMJTI × PERMIKOMNAS</div>
   </main>
 
   <script>
@@ -184,7 +183,6 @@
     }
 
     function initParticles() { particles = []; let n = (width * height) / 9000; for(let i=0; i<n; i++) particles.push(new P()); }
-    
     function anim() {
       ctx.clearRect(0,0,width,height);
       const isDark = document.documentElement.classList.contains('dark');
@@ -199,13 +197,6 @@
             ctx.lineWidth = 1; ctx.moveTo(p.x, p.y); ctx.lineTo(p2.x, p2.y); ctx.stroke();
           }
         }
-        if (mouse.x != null) {
-          let dxM = p.x - mouse.x; let dyM = p.y - mouse.y; let distM = Math.sqrt(dxM*dxM + dyM*dyM);
-          if (distM < mouse.radius) {
-            ctx.beginPath(); ctx.strokeStyle = isDark ? `rgba(239, 68, 68, ${0.8 - distM/mouse.radius})` : `rgba(239, 68, 68, ${0.5 - distM/(mouse.radius*1.5)})`; 
-            ctx.lineWidth = 1.2; ctx.moveTo(p.x, p.y); ctx.lineTo(mouse.x, mouse.y); ctx.stroke();
-          }
-        }
       }
       requestAnimationFrame(anim);
     }
@@ -215,9 +206,12 @@
     themeBtn.onclick = () => { document.documentElement.classList.toggle('dark'); localStorage.setItem('theme', document.documentElement.classList.contains('dark')?'dark':'light'); };
     if(localStorage.getItem('theme')==='dark') document.documentElement.classList.add('dark');
 
-    const scriptURL = atob("aHR0cHM6Ly9zY3JpcHQuZ29vZ2xlLmNvbS9tYWNyb3Mvcy9BS2Z5Y2J5UWFRM003WGwzMmNWMkxWNldIYnd4ZlNBZllwckRZNTZYSHM1M2YteHNoU1FEVG1tY3lJRGMtU3lxUVVwTHNJOEEvZXhlYw==");
+    // =========================================================================
+    // INI ADALAH URL DARI ID PENERAPAN (DEPLOYMENT) TERBARU ANDA
+    // =========================================================================
+    const scriptURL = "https://script.google.com/macros/s/AKfycbywbxub1I10ofGtjm-oqq_-pR_IMyjgYKpwpA5J6MQIuqLuQyy3KHcI9a3dMxPL_jZ5/exec"; 
+    
     const waLink = "https://chat.whatsapp.com/IBGUSpAZZVp3kO3eGuHOTo";
-
     const form = document.getElementById('registrationForm');
     const btn = document.getElementById('submitBtn');
     const err = document.getElementById('error-msg');
@@ -226,16 +220,21 @@
       e.preventDefault();
       const checkedJadwal = Array.from(form.querySelectorAll('input[name="jadwal"]:checked')).map(cb => cb.value);
       if(checkedJadwal.length === 0) { err.textContent = "Mohon pilih minimal satu sesi."; err.classList.remove('hidden'); return; }
+      
       err.classList.add('hidden'); btn.disabled = true; btn.innerHTML = `<span class="spinner"></span>MEMPROSES...`;
-      const fd = new FormData(form); fd.set('jadwal', checkedJadwal.join(", "));
+      
+      const fd = new FormData(form); 
+      fd.set('jadwal', checkedJadwal.join(", "));
+
       try {
-        await fetch(scriptURL, { method: 'POST', body: fd });
+        const response = await fetch(scriptURL, { method: 'POST', body: fd });
+        if (!response.ok) throw new Error("Jaringan bermasalah");
         document.getElementById('form-wrapper').classList.add('hidden');
         document.getElementById('success-wrapper').classList.remove('hidden');
         document.getElementById('wa-btn').href = waLink;
       } catch (error) {
         btn.disabled = false; btn.innerHTML = "SUBMIT PENDAFTARAN";
-        err.textContent = "Gagal terhubung. Pastikan Deployment diatur ke 'Siapa saja'.";
+        err.textContent = "Gagal terhubung. Pastikan URL sudah benar dan aksesnya 'Siapa saja'.";
         err.classList.remove('hidden');
       }
     };
